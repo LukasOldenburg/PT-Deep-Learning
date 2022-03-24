@@ -69,3 +69,20 @@ for t in range(len(noise_list)):
     print('#### Evaluation on test set ####')
     acc = NN.predict(x_test, y_test)
     print('Recall Accuracy on test set: {} % \n'.format(acc))
+
+print('-----------------------------------------------------------------------------------------------------------\n')
+# ----------- One Hidden Layer Neural Network Classifier (# of neurons) -----------
+neuron_list = [1, 3, 5, 7, 9]
+for p in range(len(neuron_list)):
+    for g in range(len(noise_list)):
+
+        print('-------- One Hidden Layer Neural Network on dataset with noise ratio {}--------'.format(noise_list[g]))
+
+        x_train, y_train, x_test, y_test = load_data(noise_list[g])
+        print('Number of neurons: {}'.format(neuron_list[p]))
+        NN = NeuralNetwork(hidden_layer=1, layer_units=[neuron_list[p]], lr=0.5, epochs=200)
+        NN.init_network(x_train)
+        for j in range(NN.epochs):
+            loss, acc = NN.training_step(x_train, y_train)
+        acc = NN.predict(x_test, y_test)
+        print('Recall Accuracy on test set: {} % \n'.format(acc))
