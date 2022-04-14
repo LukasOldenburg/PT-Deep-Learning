@@ -1,4 +1,5 @@
 import torch, torchvision
+from models.lenet import LeNet
 
 # ---------------- define training parameters ----------------
 batch_size = 64
@@ -35,4 +36,10 @@ valloader = torch.utils.data.DataLoader(valset,
                                         batch_size=batch_size,
                                         shuffle=True)
 
-A = 1
+# ---------------- perform network training with LeNet ----------------
+lenet = LeNet()
+lenet.train()
+for batch_idx, data in enumerate(trainloader):
+    x, y = data
+    y_pred = lenet(x)
+
