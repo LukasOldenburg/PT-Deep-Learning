@@ -3,10 +3,18 @@ import torch
 
 class AlexNet(nn.Module):
 
-    def __init__(self, global_params=None):
+    def __init__(self, dataset='mnist'):
         super(AlexNet, self).__init__()
+
+        self.dataset = dataset
+
+        # dataset specific linear layers
+        self.conv_layer1 = nn.Conv2d(1, 96, kernel_size=(5,5), stride=(1,1), padding=2) if self.dataset == 'mnist' else nn.Conv2d(3, 96, kernel_size=(5,5), stride=(1,1), padding=2)
+        self.lin_layer1 = nn.Linear(1024, 2304) if self.dataset == 'mnist' else nn.Linear(2, 4096)
+        self.lin_layer2 = nn.Linear(2304, 10) if self.dataset == 'mnist' else nn.Linear(4096, 10)
+
         self.convnet = nn.Sequential(
-            nn.Conv2d(1, 96, kernel_size=(5,5), stride=(1,1), padding=2),
+            self.conv_layer1,
             nn.ReLU(),
             nn.LocalResponseNorm(size=5),
             nn.MaxPool2d(kernel_size=3, stride=2),
@@ -22,11 +30,12 @@ class AlexNet(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=3, stride=2)
         )
+
         self.classifier = nn.Sequential(
-            nn.Linear(1024, 2304),
+            self.lin_layer1,
             nn.ReLU(),
             nn.Dropout(p=0.5),
-            nn.Linear(2304, 10),
+            self.lin_layer2,
             nn.Dropout(p=0.5),
             nn.Softmax(dim=1)
         )

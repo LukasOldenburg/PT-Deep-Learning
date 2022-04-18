@@ -86,7 +86,7 @@ def val_step(val_loader, model, device, rgb_channel=False):
     return val_loss / len(val_loader)
 
 
-def final_eval(train, dataloader, model, device, rgb_channel):
+def final_eval(train, dataloader, model, device, rgb_channel=False):
     model.eval()
     model.to(device)
     cl = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)  # tuple with all classes in the dataset
