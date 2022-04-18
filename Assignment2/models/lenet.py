@@ -11,7 +11,7 @@ class LeNet(nn.Module):
         self.fc1 = nn.Linear(800, 500)
         self.fc2 = nn.Linear(500, 10)
         self.relu = nn.ReLU()
-        self.softmax = nn.Softmax()
+        self.softmax = nn.Softmax(dim=1)
         self.flatten = nn.Flatten()
 
         self.convnet = nn.Sequential(self.conv1, self.pool, self.conv2, self.pool)
