@@ -8,7 +8,7 @@ from torchvision import transforms
 import torchvision
 from torchvision import models
 
-# sys.stdout = open("out.txt", "w")
+sys.stdout = open("out.txt", "w")
 
 # ---------------- define training parameters ----------------
 batch_size = 64
