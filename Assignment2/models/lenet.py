@@ -17,8 +17,8 @@ class LeNet(nn.Module):
         self.convnet = nn.Sequential(self.conv1, self.pool, self.conv2, self.pool)
 
     def forward(self, x):
-        out_convnet = self.convnet(x)
-        out = self.flatten(out_convnet)
+        out = self.convnet(x)
+        out = self.flatten(out)
         out = self.relu(self.fc1(out))
         return self.softmax(self.fc2(out))
 

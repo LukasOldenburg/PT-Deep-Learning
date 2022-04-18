@@ -3,7 +3,7 @@ from torch import nn
 import numpy as np
 
 
-def train_step(ep, train_loader, model, device, learning_rate, scheduler=False):
+def train_step(ep, train_loader, model, device, learning_rate, rgb_channel=False, scheduler=False):
     model.train()
     model.to(device)
     train_loss = 0
@@ -18,9 +18,14 @@ def train_step(ep, train_loader, model, device, learning_rate, scheduler=False):
     console_loss = 0
 
     for batch_idx, data in enumerate(train_loader):
+
         x, y = data
-        x.to(device)
-        y.to(device)
+        x=x.to(device)
+        y=y.to(device)
+
+        # fit input data for pretrained resnet
+        if rgb_channel:
+            x = x.expand(-1, 3, -1, -1)
 
         # define loss function and feed itr with predicted and ground truth values
         ce = nn.CrossEntropyLoss()
@@ -34,7 +39,7 @@ def train_step(ep, train_loader, model, device, learning_rate, scheduler=False):
         # print loss and accuracy measurements
         log_interval = int(len(train_loader) / 3)
         console_loss += loss
-        train_loss += loss.detach().numpy()
+        train_loss += loss.detach().cpu().numpy()
         if batch_idx > 0 and batch_idx % log_interval == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 ep, batch_idx * train_loader.batch_size, len(train_loader.dataset),
@@ -48,7 +53,7 @@ def train_step(ep, train_loader, model, device, learning_rate, scheduler=False):
     return train_loss / len(train_loader)
 
 
-def val_step(val_loader, model, device):
+def val_step(val_loader, model, device, rgb_channel=False):
     model.eval()
     model.to(device)
     corr = 0
@@ -57,13 +62,18 @@ def val_step(val_loader, model, device):
     with torch.no_grad():
         for batch_idx, data in enumerate(val_loader):
             x, y = data
-            x.to(device)
-            y.to(device)
+            x=x.to(device)
+            y=y.to(device)
+
+            # fit input data for pretrained resnet
+            if rgb_channel:
+                x = x.expand(-1, 3, -1, -1)
+
             out = model(x)
 
             ce = nn.CrossEntropyLoss()
             loss = ce(out, y)
-            val_loss += loss.detach().numpy()
+            val_loss += loss.detach().cpu().numpy()
 
             # transforming probability into class prediction
             _, y_pred = torch.max(out, dim=1)
@@ -76,7 +86,7 @@ def val_step(val_loader, model, device):
     return val_loss / len(val_loader)
 
 
-def final_eval(train, dataloader, model, device):
+def final_eval(train, dataloader, model, device, rgb_channel):
     model.eval()
     model.to(device)
     cl = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)  # tuple with all classes in the dataset
@@ -87,8 +97,12 @@ def final_eval(train, dataloader, model, device):
     with torch.no_grad():
         for batch_idx, data in enumerate(dataloader):
             x, y = data
-            x.to(device)
-            y.to(device)
+            x=x.to(device)
+            y=y.to(device)
+
+            # fit input data for pretrained resnet
+            if rgb_channel:
+                x = x.expand(-1, 3, -1, -1)
 
             out = model(x)
 
