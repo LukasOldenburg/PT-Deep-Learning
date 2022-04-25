@@ -1,0 +1,7 @@
+For Windows
+
+Download Ubuntu shell
+Run weight download shell script
+Download Pascal Voc Dataset
+Pass jpg images in images folder
+run convert_voc_to_yolo script
