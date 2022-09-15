@@ -1,6 +1,5 @@
 from torch import nn
 import torch
-# test1001
 
 class AlexNet(nn.Module):
 
