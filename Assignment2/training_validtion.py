@@ -41,9 +41,10 @@ def train_step(ep, train_loader, model, device, learning_rate, rgb_channel=False
         console_loss += loss
         train_loss += loss.detach().cpu().numpy()
         if batch_idx > 0 and batch_idx % log_interval == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                ep, batch_idx * train_loader.batch_size, len(train_loader.dataset),
-                    100. * batch_idx / len(train_loader), console_loss / log_interval))
+            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(ep, batch_idx * train_loader.batch_size,
+                                                                           len(train_loader.dataset),
+                                                                           100. * batch_idx / len(train_loader),
+                                                                           console_loss / log_interval))
             console_loss = 0
 
         # schedule learning rate if desired

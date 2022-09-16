@@ -6,9 +6,12 @@ from utils import plot_loss
 import sys
 from torchvision import transforms
 import torchvision
+import time
 from torchvision import models
 
 sys.stdout = open("out.txt", "w")
+
+start = time.time()
 
 # ---------------- define training parameters ----------------
 batch_size = 64
@@ -96,50 +99,51 @@ else:
 # plt.savefig("resnet50_Cifar.pdf")
 # torch.save(resnet50.state_dict(), "resnet50_Cifar")
 
-# print('----------------- Starting CIFAR10 resnet101 Training -----------------')
-#
-# batch_size = 64
-# train_epochs = 3
-# learning_rate = 1e-6
-#
-# resnet101 = models.resnet101(pretrained=True)
-# train_loss = ['train loss']
-# val_loss = ['validation loss']
-# for ep in range(0, train_epochs):
-#     loss_train = train_step(ep=ep, train_loader=train_loader, model=resnet101, learning_rate=learning_rate,
-#                             device=device, scheduler=schedule)
-#     loss_validation = val_step(val_loader=val_loader, model=resnet101, device=device)
-#     train_loss.append(loss_train)
-#     val_loss.append(loss_validation)
-# final_eval(train=True, dataloader=test_loader, model=resnet101, device=device)
-# final_eval(train=False, dataloader=train_loader, model=resnet101, device=device)
-# fig = plot_loss(train_loss[1:], val_loss[1:], visualize=False)
-#
-# plt.savefig("resnet101_Cifar.pdf")
-# torch.save(resnet101.state_dict(), "resnet101_Cifar")
-
-
-print('----------------- Starting CIFAR10 AlexNet Training -----------------')
+print('----------------- Starting CIFAR10 resnet101 Training -----------------')
 
 batch_size = 64
 train_epochs = 3
-learning_rate = 1e-3
+learning_rate = 1e-5
 
-alexnet = AlexNet(dataset='cifar')
+resnet101 = models.resnet101(pretrained=True)
 train_loss = ['train loss']
 val_loss = ['validation loss']
 for ep in range(0, train_epochs):
-    loss_train = train_step(ep=ep, train_loader=train_loader, model=alexnet, learning_rate=learning_rate,
+    loss_train = train_step(ep=ep, train_loader=train_loader, model=resnet101, learning_rate=learning_rate,
                             device=device, scheduler=schedule)
-    loss_validation = val_step(val_loader=val_loader, model=alexnet, device=device)
+    loss_validation = val_step(val_loader=val_loader, model=resnet101, device=device)
     train_loss.append(loss_train)
     val_loss.append(loss_validation)
-final_eval(train=True, dataloader=test_loader, model=alexnet, device=device)
-final_eval(train=False, dataloader=train_loader, model=alexnet, device=device)
+print("--- %s seconds ---" % (time.time() - start))
+final_eval(train=True, dataloader=test_loader, model=resnet101, device=device)
+final_eval(train=False, dataloader=train_loader, model=resnet101, device=device)
 fig = plot_loss(train_loss[1:], val_loss[1:], visualize=False)
 
-plt.savefig("AlexNet_MNIST.pdf")
-torch.save(alexnet.state_dict(), "AlexNet_MNIST")
+plt.savefig("resnet101_Cifar.pdf")
+torch.save(resnet101.state_dict(), "resnet101_Cifar")
 
 
-sys.stdout.close()
+# print('----------------- Starting CIFAR10 AlexNet Training -----------------')
+#
+# batch_size = 64
+# train_epochs = 3
+# learning_rate = 1e-3
+#
+# alexnet = AlexNet(dataset='cifar')
+# train_loss = ['train loss']
+# val_loss = ['validation loss']
+# for ep in range(0, train_epochs):
+#     loss_train = train_step(ep=ep, train_loader=train_loader, model=alexnet, learning_rate=learning_rate,
+#                             device=device, scheduler=schedule)
+#     loss_validation = val_step(val_loader=val_loader, model=alexnet, device=device)
+#     train_loss.append(loss_train)
+#     val_loss.append(loss_validation)
+# final_eval(train=True, dataloader=test_loader, model=alexnet, device=device)
+# final_eval(train=False, dataloader=train_loader, model=alexnet, device=device)
+# fig = plot_loss(train_loss[1:], val_loss[1:], visualize=False)
+#
+# plt.savefig("AlexNet_MNIST.pdf")
+# torch.save(alexnet.state_dict(), "AlexNet_MNIST")
+#
+#
+# sys.stdout.close()
