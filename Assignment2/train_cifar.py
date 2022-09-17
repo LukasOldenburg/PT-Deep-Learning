@@ -9,14 +9,14 @@ import torchvision
 import time
 from torchvision import models
 
-sys.stdout = open("out.txt", "w")
+# sys.stdout = open("out.txt", "w")
 
 start = time.time()
 
 # ---------------- define training parameters ----------------
 batch_size = 64
 train_val_split = True
-train_epochs = 50
+train_epochs = 10
 learning_rate = 1e-6
 schedule = False
 # setting device accordingly

@@ -113,5 +113,5 @@ fig = plot_loss(train_loss[1:], val_loss[1:], visualize=False)
 plt.savefig("Resnet18_MNIST.pdf")
 torch.save(resnet18.state_dict(), "Resnet18_MNIST")
 
-sys.stdout.close()
+# sys.stdout.close()
 
